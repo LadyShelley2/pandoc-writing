@@ -1,0 +1,239 @@
+\documentclass[]{article}
+\usepackage{geometry} 		% 設定邊界
+\geometry{
+  top=1in,
+  inner=1in,
+  outer=1in,
+  bottom=1in,
+  headheight=3ex,
+  headsep=2ex
+}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \usepackage{fontspec} 	% 允許設定字體
+  \usepackage{xeCJK} 		% 分開設置中英文字型
+  \setCJKmainfont{NSimSun} 	% 設定中文字型
+  \setmainfont{Georgia} 	% 設定英文字型
+  \setromanfont{Georgia} 	% 字型
+  \setmonofont{Courier New}
+  \linespread{1.2}\selectfont 	% 行距
+  \XeTeXlinebreaklocale "zh" 	% 針對中文自動換行
+  \XeTeXlinebreakskip = 0pt plus 1pt % 字與字之間加入0pt至1pt的間距，確保左右對整齊
+  \parindent 0em 		% 段落縮進
+  \setlength{\parskip}{20pt} 	% 段落之間的距離
+  \ifxetex
+    \usepackage{xltxtra,xunicode}
+  \fi
+  \defaultfontfeatures{Mapping=tex-text,Scale=MatchLowercase}
+  \newcommand{\euro}{€}
+\fi
+% use microtype if available
+\IfFileExists{microtype.sty}{\usepackage{microtype}}{}
+\ifxetex
+  \usepackage[setpagesize=false, % page size defined by xetex
+              unicode=false, % unicode breaks when used with xetex
+              xetex]{hyperref}
+\else
+  \usepackage[unicode=true]{hyperref}
+\fi
+\hypersetup{breaklinks=true,
+            bookmarks=true,
+            pdfauthor={},
+            pdftitle={},
+            colorlinks=true,
+            urlcolor=blue,
+            linkcolor=magenta,
+            pdfborder={0 0 0}}
+\urlstyle{same}  % don't use monospace font for urls
+\setlength{\parindent}{0pt}
+%\setlength{\parskip}{6pt plus 2pt minus 1pt}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+
+\newcommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\title{\huge 在OSX平台上的XeLaTeX中文測試} % 設置標題，使用巨大字體
+\author{FoolEgg.com} 		% 設置作者
+\date{February 2013} 		% 設置日期
+\usepackage{titling}
+\setlength{\droptitle}{-8em} 	% 將標題移動至頁面的上面
+
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\pagestyle{fancyplain}
+
+\setcounter{secnumdepth}{0}
+
+\author{}
+\date{}
+
+\begin{document}
+
+\subsection{相关工作}\label{ux76f8ux5173ux5de5ux4f5c}
+
+轨迹聚类问题主要包括三个关键点：聚类对象的确定，相似度衡量以及聚类算法。此外，面对大规模轨迹数据通常需要对数据进行采样后再运算以提高运算效率。
+
+轨迹聚类的聚类对象主要有三种：位置点、轨迹片段以及整条轨迹。以位置点作为聚类对象可挖掘位置点的信息\textsuperscript{{[}1{]}}\textsuperscript{{[}2{]}}，例如发现周围人们喜欢聚集的地方。文献\textsuperscript{{[}2{]}}中定义了一种基于道路网络的坐标，将每个位置点表示成一个坐标。文献\textsuperscript{{[}1{]}}中将紧邻的GPS记录聚类成一个地点并表示成现实中语义化地点。点表示法只关注散点的分布，因此不能够发现关于轨迹片段或者整个轨迹的模式。以轨迹片段为聚类对象是将完整的轨迹分为多段子轨迹，并通过密度和流量挖掘有用信息。TraClus\textsuperscript{{[}3{]}}将完整的轨迹在轨迹急促变向的点上将轨迹切成线段，利用基于密度的聚类对轨迹片段进行聚类，但TraClus不能有效地对路网中的轨迹进行聚类。文献\textsuperscript{{[}4{]}}提出了NEAT模型，完成了对路网中移动对象的轨迹的快速有效的聚类.
+将路网中的轨迹按照路段切割成轨迹片段，利用路网距离和路网中流的特性对轨迹片段进行聚类。整条轨迹是用物体在路网上运动时所记录的位置点序列表示，将整条轨迹作为聚类对象有助于在整个轨迹数据集上发现聚簇的结构。
+
+关于相似度度量，文献\textsuperscript{{[}5{]}}中考虑了时间和位置的因素，利用轨迹线条间形状的相似度挖掘相似物体。文献\textsuperscript{{[}6{]}}考虑了轨迹片段的相似性并提出了``K-Warping''算法。文献\textsuperscript{{[}7{]}}\textsuperscript{{[}8{]}}\textsuperscript{{[}9{]}}\textsuperscript{{[}10{]}}中使用了评价连续和断续轨迹的OWD（One
+Way
+Distance）算法。文献\textsuperscript{{[}8{]}}中调查了含有大量离异点的轨迹数据并提出了基于最长公共字符串算法的距离函数。文献{[}Trajectory
+Clustering: A Partition-and-Group
+Framework{]}中定义了一种兼顾轨迹间垂直距离、平行距离以及两段轨迹夹角的距离计算方法，此方法能够更好地刻画轨迹间的密度。EDR和ERP相似度度量方法只适用于长度相等的轨迹，但轨迹的形状和长度各异。\textsuperscript{{[}11{]}}使用DTW距离描述不相等轨迹的相似度。\textsuperscript{{[}12{]}}使用基于回归混合模型的聚类，只适用于较短的轨迹。\textsuperscript{{[}13{]}}采用凝聚的层次聚类算法，相似度为轨迹之间每对节点的最短距离。但由于这些算法都以欧式距离为基础而不是道路网络中的实际距离，因此对于路网中的轨迹相似度衡量都不合适。文献\textsuperscript{{[}14{]}}首次提出了基于道路网络的时空距离的相似度衡量函数。文献\textsuperscript{{[}15{]}}\textsuperscript{{[}16{]}}也采用了相同的方法。文献{[}{]}
+提出了一种叫TRACLUS的算法用来将相似的子轨迹聚类成一个聚簇，共包括两个阶段：首先将轨迹切分成线段，然后通过相似度聚类。文献{[}{]}提出了一种基于路网距离的优化的最短路径计算方法来衡量路网上两点之间的相似度。\textsuperscript{{[}17{]}}提出了TraceMob模型，该模型的轨迹相似度度量方法不仅考虑了轨迹长度不相等的特性，同时结合了路网限制。
+
+数据聚类是将无标签的数据集\(O={o_1,o_2,\ldots,o_n}\)分成\(k\)个相似集合的过程，其中\(1<{k}<{n}\)。聚类方法有很多种\textsuperscript{{[}18{]}},总体来讲主要可以分为四类：基于划分聚类、
+基于分层聚类、基于分布聚类、基于密度聚类等，另外还有一些少数的方法：基于有向图的聚类方法等。基于划分聚类的方法以k-means、k-medoids为代表，先将数据集划分成不同的k簇，然后迭代交换不同类之间的元素从而提升分类效果。k-means算法是将簇内元素的平均值作为簇的中心。而k-medoids算法，例如
+PAM，CLARA{[}{]},CLARANS{[}{]}则是采用簇内的某一个点作为簇的中心，相比k-means，更不容易受到异常点的影响。但划分聚类需要根据先验知识提供簇的数目\(k\)，\(k\)值的设定会直接影响聚类结果。分层聚类法通常有从下至上凝聚型聚类和从上至下分裂型聚类，凝聚型聚类初始将每个数据点作为一个类别，如single-link
+算法就是将距离最近的两个类别聚成新的一类。分裂型聚类是将初始所有数据看成一个类别，然后不断细分成更小的类别。层次聚类方法的时间复杂度比较高，为\(O(N^2)\),其中N为数据的个数，此外对离异点也比较敏感。BIRCH\textsuperscript{{[}19{]}}
+CURE\textsuperscript{{[}20{]}} 和
+C2P\textsuperscript{{[}21{]}}等算法对传统的分层聚类算法做出了相应的改进。基于分布的聚类假设数据满足某种分布如高斯分布，聚类的目标是寻找最合适的参数，基于分布聚类的最大问题在于过拟合，并且如何选择合适的模型也是比较困难的。基于密度的聚类可以发现空间中的高密度区域并将其与低密度区域分开，DBSCAN\textsuperscript{{[}22{]}}
+和 OPTICS\textsuperscript{{[}23{]}}
+算法是密度聚类的典型代表。这种方法不需要知道任何先验知识，可以通过密度分布寻找到任何形状的聚类类别，并且对异常点不敏感，且不需要先验知识定义聚簇的个数。由于轨迹通常形状各异，且有较多异常点，因此基于密度的聚类方法更加适合轨迹挖掘。
+
+对大规模轨迹数据进行挖掘由于数据量比较大，因此一般要进行采样。文献\textsuperscript{{[}24{]}}对新加坡出租车的OD对轨迹数据使用DBSCAN聚类算法聚类之前,从原始数据中按单次乘客的出行轨迹抽取出了相应的轨迹数据.然后在抽取出的轨迹数据的基础上使用采样算法ClusiVAT\textsuperscript{{[}25{]}}对原数据进行了采样,以期在减小原始数据量级的条件下保留了原始数据集的特性和潜在的模式.文献\textsuperscript{{[}26{]}}也给出了一种轨迹采样方法,与ClusiVAT不同,文献\textsuperscript{{[}26{]}}在采样的时候考虑了轨迹的形状.本文设计了一种采样方法用于从原数据集中采样部分数据,采样的数据不仅要在数据量上便于算法的运行,而且要能够尽量的保留原数据集的性质。
+
+为了有效处理大规模轨迹的聚类，本文设计了组合聚类策略。
+
+\hypertarget{refs}{}
+\hypertarget{ref-cao2010mining}{}
+{[}1{]} CAO X, CONG G, JENSEN C S. Mining significant semantic locations
+from gPS data{[}J{]}. Proceedings of the VLDB Endowment, VLDB Endowment,
+2010, 3(1-2): 1009--1020.
+
+\hypertarget{ref-bhaskar2015passenger}{}
+{[}2{]} BHASKAR A, CHUNG E, OTHERS. Passenger segmentation using smart
+card data{[}J{]}. IEEE Transactions on intelligent transportation
+systems, IEEE, 2015, 16(3): 1537--1548.
+
+\hypertarget{ref-lee2007trajectory}{}
+{[}3{]} LEE J-G, HAN J, WHANG K-Y. Trajectory clustering: A
+partition-and-group framework{[}C{]}//Proceedings of the 2007 aCM sIGMOD
+international conference on management of data. ACM, 2007: 593--604.
+
+\hypertarget{ref-han2015road}{}
+{[}4{]} HAN B, LIU L, OMIECINSKI E. Road-network aware trajectory
+clustering: Integrating locality, flow, and density{[}J{]}. IEEE
+Transactions on Mobile Computing, IEEE, 2015, 14(2): 416--429.
+
+\hypertarget{ref-yanagisawa2003shape}{}
+{[}5{]} YANAGISAWA Y, AKAHANI J-i, SATOH T. Shape-based similarity query
+for trajectory of mobile objects{[}C{]}//Mobile data management.
+Springer, 2003: 63--77.
+
+\hypertarget{ref-lin2005shapes}{}
+{[}6{]} LIN B, SU J. Shapes based trajectory queries for moving
+objects{[}C{]}//Proceedings of the 13th annual aCM international
+workshop on geographic information systems. ACM, 2005: 21--30.
+
+\hypertarget{ref-vlachos2002robust}{}
+{[}7{]} VLACHOS M, GUNOPULOS D, KOLLIOS G. Robust similarity measures
+for mobile object trajectories{[}C{]}//Database and expert systems
+applications, 2002. proceedings. 13th international workshop on. IEEE,
+2002: 721--726.
+
+\hypertarget{ref-vlachos2002discovering}{}
+{[}8{]} VLACHOS M, KOLLIOS G, GUNOPULOS D. Discovering similar
+multidimensional trajectories{[}C{]}//Data engineering, 2002.
+proceedings. 18th international conference on. IEEE, 2002: 673--684.
+
+\hypertarget{ref-chen2005robust}{}
+{[}9{]} CHEN L, ÖZSU M T, ORIA V. Robust and fast similarity search for
+moving object trajectories{[}C{]}//Proceedings of the 2005 aCM sIGMOD
+international conference on management of data. ACM, 2005: 491--502.
+
+\hypertarget{ref-sakurai2005ftw}{}
+{[}10{]} SAKURAI Y, YOSHIKAWA M, FALOUTSOS C. FTW: Fast similarity
+search under the time warping distance{[}C{]}//Proceedings of the
+twenty-fourth aCM sIGMOD-sIGACT-sIGART symposium on principles of
+database systems. ACM, 2005: 326--337.
+
+\hypertarget{ref-yi1998efficient}{}
+{[}11{]} YI B-K, JAGADISH H, FALOUTSOS C. Efficient retrieval of similar
+time sequences under time warping{[}C{]}//Data engineering, 1998.
+proceedings., 14th international conference on. IEEE, 1998: 201--208.
+
+\hypertarget{ref-gaffney1999trajectory}{}
+{[}12{]} GAFFNEY S, SMYTH P. Trajectory clustering with mixtures of
+regression models{[}C{]}//Proceedings of the fifth aCM sIGKDD
+international conference on knowledge discovery and data mining. ACM,
+1999: 63--72.
+
+\hypertarget{ref-roh2010nncluster}{}
+{[}13{]} ROH G-P, HWANG S-w. Nncluster: An efficient clustering
+algorithm for road network trajectories{[}C{]}//International conference
+on database systems for advanced applications. Springer, 2010: 47--61.
+
+\hypertarget{ref-hwang2005spatio}{}
+{[}14{]} HWANG J-R, KANG H-Y, LI K-J. Spatio-temporal similarity
+analysis between trajectories on road networks{[}J{]}. Perspectives in
+Conceptual Modeling, Springer, 2005: 280--289.
+
+\hypertarget{ref-chang2007spatio}{}
+{[}15{]} CHANG J-W, BISTA R, KIM Y-C, 等. Spatio-temporal similarity
+measure algorithm for moving objects on spatial networks{[}J{]}.
+Computational Science and Its Applications--ICCSA 2007, Springer, 2007:
+1165--1178.
+
+\hypertarget{ref-tiakas2006trajectory}{}
+{[}16{]} TIAKAS E, PAPADOPOULOS A N, NANOPOULOS A, 等. Trajectory
+similarity search in spatial networks{[}C{]}//Database engineering and
+applications symposium, 2006. iDEAS'06. 10th international. IEEE, 2006:
+185--192.
+
+\hypertarget{ref-yiu2004clustering}{}
+{[}17{]} YIU M L, MAMOULIS N. Clustering objects on a spatial
+network{[}C{]}//Proceedings of the 2004 aCM sIGMOD international
+conference on management of data. ACM, 2004: 443--454.
+
+\hypertarget{ref-han2011data}{}
+{[}18{]} HAN J, PEI J, KAMBER M. Data mining: Concepts and
+techniques{[}M{]}. Elsevier, 2011.
+
+\hypertarget{ref-kaufman2009finding}{}
+{[}19{]} KAUFMAN L, ROUSSEEUW P J. Finding groups in data: An
+introduction to cluster analysis{[}M{]}. John Wiley \& Sons, 2009, 344.
+
+\hypertarget{ref-livnybirch}{}
+{[}20{]} LIVNY M. BIRCH: An e cient data clustering method for very
+large databases{[}J{]}.
+
+\hypertarget{ref-ng1994cient}{}
+{[}21{]} NG R T, HAN J. E cient and e ective clustering methods for
+spatial data mining{[}C{]}//Proceedings of vLDB. Citeseer, 1994:
+144--155.
+
+\hypertarget{ref-ester1996density}{}
+{[}22{]} ESTER M, KRIEGEL H-P, SANDER J, 等. A density-based algorithm
+for discovering clusters in large spatial databases with
+noise.{[}C{]}//Kdd. 1996, 96: 226--231.
+
+\hypertarget{ref-ankerst1999optics}{}
+{[}23{]} ANKERST M, BREUNIG M M, KRIEGEL H-P, 等. OPTICS: Ordering
+points to identify the clustering structure{[}C{]}//ACM sigmod record.
+ACM, 1999, 28: 49--60.
+
+\hypertarget{ref-kumar2016understanding}{}
+{[}24{]} KUMAR D, WU H, LU Y, 等. Understanding urban mobility via taxi
+trip clustering{[}C{]}//Mobile data management (mDM), 2016 17th iEEE
+international conference on. IEEE, 2016, 1: 318--324.
+
+\hypertarget{ref-kumar2016hybrid}{}
+{[}25{]} KUMAR D, BEZDEK J C, PALANISWAMI M, 等. A hybrid approach to
+clustering in big data{[}J{]}. IEEE transactions on cybernetics, IEEE,
+2016, 46(10): 2372--2385.
+
+\hypertarget{ref-pelekis2010unsupervised}{}
+{[}26{]} PELEKIS N, KOPANAKIS I, PANAGIOTAKIS C, 等. Unsupervised
+trajectory sampling{[}J{]}. Machine learning and knowledge discovery in
+databases, Springer, 2010: 17--33.
+
+\end{document}
